@@ -2,7 +2,7 @@ package com.bean;
 
 public class Type {
 	
-	String classification;
+	public String classification;
 	
 	public Type() {
 		this.classification = "mammal";

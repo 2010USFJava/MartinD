@@ -2,7 +2,7 @@ package com.bean;
 
 public class Animal {
 	
-	Type type;
+	public Type type;
 	String color;
 	int legs;
 	boolean tail;
