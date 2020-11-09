@@ -1,11 +1,17 @@
 package com.revature.beans;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import com.revature.menus.Menu;
+import com.revature.services.Transactions;
 
-public class AccountInfo {
+public class AccountInfo implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3308551095313525457L;
 	private String name;
 	private String address;
 	private String phoneNumber;
@@ -15,19 +21,30 @@ public class AccountInfo {
 	private int accountNumber;
 	private String username;
 	private String password;
+	//private int balance;
+	private Transactions transactions;
 	
 	public static List<AccountInfo> accountLogins = new ArrayList<AccountInfo>();
+	public static List<AccountInfo> customerAccounts = new ArrayList<AccountInfo>();
+	
 	
 	
 	
 	
 	//constructor for customer username and password (not open to users)
 	//could ason just use a hashmap to store usernames and passwords !!!!
-	AccountInfo(String username, String password) {
+	public AccountInfo(String username, String password) {
 		this.username = username;
 		this.password = password;
 		accountLogins.add(this);
 	}
+	
+	
+	public AccountInfo(String name, String address, String phoneNumber, String emailAddress, String dateOfBirth) {
+		this(name, address, phoneNumber, emailAddress, dateOfBirth, "Joint Account Holder");
+		customerAccounts.add(this);
+	}
+	
 	
 	
 	//constructor for when customer is registering (employees and costumers will be able to see.
@@ -37,11 +54,35 @@ public class AccountInfo {
 		this.phoneNumber = phoneNumber;
 		this.emailAddress = emailAddress;
 		this.dateOfBirth = dateOfBirth;
-		//this.accountType = accountType;
 		this.username = username;
-		//this.accountNumber = accountNumber;
+		customerAccounts.add(this);
+	}
+	
+	/*public AccountInfo(String name, String address, String phoneNumber, String emailAddress, String dateOfBirth, String username, Transactions transactions) {
+		this.name = name;
+		this.address = address;
+		this.phoneNumber = phoneNumber;
+		this.emailAddress = emailAddress;
+		this.dateOfBirth = dateOfBirth;
+		this.username = username;
+		this.transactions = transactions;
+	}*/
+
+
+	
+	
+
+	
+
+
+	public Transactions getTransactions() {
+		return transactions;
 	}
 
+
+	public void setTransactions(Transactions transactions) {
+		this.transactions = transactions;
+	}
 
 
 	public String getName() {
@@ -136,8 +177,8 @@ public class AccountInfo {
 	@Override
 	public String toString() {
 		return "AccountInfo [name=" + name + ", address=" + address + ", phoneNumber=" + phoneNumber + ", emailAddress="
-				+ emailAddress + ", dateOfBirth=" + dateOfBirth + ", accountType=" + accountType + ", accountNumber="
-				+ accountNumber + ", username=" + username + ", password=" + password + "]";
+				+ emailAddress + ", dateOfBirth=" + dateOfBirth + ", username=" + username + ", password=" + password
+				+ ", transactions=" + transactions + "]";
 	}
 	
 	
@@ -149,6 +190,7 @@ public class AccountInfo {
 			
 			if(userName.equals(uname) && userPassword.equals(pword)) {
 				System.out.println("Login Successful!");
+				Menu.accountMenu();
 			} else {
 				System.out.println("Sorry couldn't find that login information.");
 				System.out.println("Please make sure you have the correct username and password.");
@@ -156,6 +198,19 @@ public class AccountInfo {
 			}
 		}
 		
+	}
+	
+	
+	public static AccountInfo findAccountNum(int acctNum) {
+		for (int i = 0; i <customerAccounts.size(); i++) {
+			customerAccounts.get(i).getTransactions();
+			int accountNumber = Transactions.getAccountNumber();
+			if(acctNum == accountNumber) {	
+				return customerAccounts.get(i);
+			}
+		}
+		System.out.println("Account not found");
+		return null;
 	}
 	
 	
