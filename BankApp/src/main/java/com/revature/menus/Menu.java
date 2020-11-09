@@ -6,6 +6,8 @@ import com.revature.beans.AccountInfo;
 import com.revature.beans.Employee;
 import com.revature.services.Transactions;
 
+import java.util.regex.*;
+
 
 public class Menu {
 	
@@ -15,6 +17,8 @@ public class Menu {
 	private static AccountInfo current;
 	
 	private static AccountInfo additional;
+	
+	private static String userName;
 	
 	
 	
@@ -47,7 +51,10 @@ public class Menu {
 						break;
 					case "l": 
 						loginMenu();
-						break;			
+						break;
+					default: 
+						System.out.println("Please enter l or r");
+						startMenu();
 				}
 				break;
 			case "e":
@@ -63,7 +70,9 @@ public class Menu {
 						break;
 					case "l": 
 						empLoginMenu();
-						break;			
+						break;	
+					default: 
+						System.out.println("Please enter l or r");
 				}
 				break;
 			case "q":
@@ -79,6 +88,9 @@ public class Menu {
 	
 	
 	public static void registerMenu() {
+		
+		
+		
 		System.out.println("Create a new account");
 		System.out.println("Please enter your name (First and Last):");
 		String fullName = scan.nextLine();
@@ -103,16 +115,8 @@ public class Menu {
 			
 		case "y": 
 			System.out.println("Great! Now that we have your personal information, let's create your login");
-			System.out.println("Create a username (Use a minimum of 10 or more characters including uppercase and lowercase letters, numbers and special characters):");
-			String userName = scan.nextLine();
-			System.out.println("Create a password");
-			System.out.println("\t Must be more than six characters");
-			System.out.println("\t Must be case sensitive (have upper and lowercase letters)");
-			System.out.println("\t Must contain a mix of letters, numbers, and specual characters (!@#$ etc.)");
-			String password = scan.nextLine();
-			
+			userNameMenu();
 			current = new AccountInfo(fullName, address, phoneNumber, emailAddress, dateOfBirth, userName);
-			AccountInfo a = new AccountInfo(userName,password);
 			System.out.println("Account Created! Now taking you to login....");
 			loginMenu();
 			break;
@@ -125,18 +129,71 @@ public class Menu {
 		
 	}
 	
-	public static void empRegMenu() {
-		System.out.println("Create a username (Use a minimum of 10 or more characters including uppercase and lowercase letters, numbers and special characters):");
-		String userName = scan.nextLine();
-		System.out.println("Create a password");
-		System.out.println("\t Must be more than six characters");
-		System.out.println("\t Must be case sensitive (have upper and lowercase letters)");
-		System.out.println("\t Must contain a mix of letters, numbers, and specual characters (!@#$ etc.)");
-		String password = scan.nextLine();
+	
+	public static void userNameMenu() {
 		
-		Employee e = new Employee(userName,password);
-		System.out.println("Account Created! Now taking you to login....");
-		loginMenu();
+		/* String regex = "^(?=.*[a-z])(?=."
+                + "*[A-Z])(?=.*\\d)"
+                + "(?=.*[-+_!@#$%^&*., ?]).+$";
+		Pattern p = Pattern.compile(regex);
+		*/
+		System.out.println("Create a username (Use a minimum of 10 or more characters including uppercase and lowercase letters, numbers and special characters):");
+		userName = scan.nextLine();
+		//Matcher m = p.matcher(userName);
+		/*if (userName.length() < 10 || !(m.matches())) {
+			System.out.println("The username you entered does not meet the requirements. Please try again");
+			userNameMenu();
+		} else { */
+			System.out.println("Create a password");
+			System.out.println("\t Must be more than six characters");
+			System.out.println("\t Must be case sensitive (have upper and lowercase letters)");
+			System.out.println("\t Must contain a mix of letters, numbers, and specual characters (!@#$ etc.)");
+			String password = scan.nextLine();
+			//Matcher ma = p.matcher(password);
+			/*if (password.length() < 6 || !(ma.matches())) {
+				System.out.println("The username you entered does not meet the requirements.Let's start from beginning");
+				userNameMenu();
+			} else { */
+				AccountInfo a = new AccountInfo(userName,password);
+			//}
+			
+		//}
+		
+	}
+	
+	
+	
+	public static void empRegMenu() {
+		/* String regex = "^(?=.*[a-z])(?=."
+                + "*[A-Z])(?=.*\\d)"
+                + "(?=.*[-+_!@#$%^&*., ?]).+$";
+		Pattern p = Pattern.compile(regex);
+		*/
+		System.out.println("Create a username (Use a minimum of 10 or more characters including uppercase and lowercase letters, numbers and special characters):");
+		userName = scan.nextLine();
+		//Matcher m = p.matcher(userName);
+		
+		/* if (userName.length() < 10 || !(m.matches())) { 
+			System.out.println("The username you entered does not meet the requirements. Please try again");
+			userNameMenu();
+		} else { */
+			System.out.println("Create a password");
+			System.out.println("\t Must be more than six characters");
+			System.out.println("\t Must be case sensitive (have upper and lowercase letters)");
+			System.out.println("\t Must contain a mix of letters, numbers, and specual characters (!@#$ etc.)");
+			String password = scan.nextLine();
+			/*Matcher ma = p.matcher(password);
+			if (password.length() < 6 || !(ma.matches())) {
+				System.out.println("The username you entered does not meet the requirements.Let's start from beginning");
+				userNameMenu();
+			} else { */
+				System.out.println("Are you an admin?");
+				boolean admin = Boolean.parseBoolean(scan.nextLine());
+				Employee e = new Employee(userName,password, admin);
+				System.out.println("Account Created! Now taking you to login....");
+				empLoginMenu();
+			//}
+		//}
 	}
 	
 	
@@ -156,6 +213,8 @@ public class Menu {
 		System.out.println("Enter password:");
 		String password  = scan.nextLine();
 		Employee.checkingLogin(userName, password);
+		System.out.println("Login Successful!");
+		Menu.empMenu();
 	}
 	
 	public static void empMenu() {
@@ -163,20 +222,40 @@ public class Menu {
 		System.out.println("[1] Look at all customer accounts");
 		System.out.println("[2] Check only open customer accounts");
 		System.out.println("[3] Exit");
+		if (Employee.isAdmin() == true) {
+			System.out.println("[4] Act as a customer");
+			System.out.println("[5] Cancel account");
+		}
 		int num = scan.nextInt();
 		
 		switch (num) {
 		
 		case 1:
 			for (AccountInfo cust : AccountInfo.customerAccounts) {
-				System.out.print(cust);
+				System.out.print(AccountInfo.getTransactions());
+				
 			}
+			changeStatusMenu();
 			break;
 		case 2: 
 			System.out.println(Employee.checkOpenCases("open"));
+			changeStatusMenu();
 			break;
 		case 3:
 			System.out.println("Thank you for using DSM Bank.");
+			break;
+		case 4:
+			transactionsMenu();
+			break;
+		case 5:
+			System.out.println("Please enter the account number:");
+			int accNum = Integer.parseInt(scan.nextLine());
+			Employee.deleteAccount(accNum);
+			empMenu();
+			break;
+		default: 
+			System.out.println("PLease enter a number 1-5");
+			empMenu();
 		}
 		
 		
@@ -192,7 +271,7 @@ public class Menu {
 		
 			case "y": 
 				System.out.println("Please enter the account number:");
-				int accNum = scan.nextInt();
+				int accNum = Integer.parseInt(scan.nextLine());
 				System.out.println("[A]ccept or [D]eny");
 				String st = scan.nextLine();
 				Employee.changeStatus(accNum, st);
@@ -202,6 +281,9 @@ public class Menu {
 			case "n":
 				empMenu();
 				break;
+			default:
+				System.out.println("PLease enter a number y or n");
+				changeStatusMenu();
 			
 		
 		}
@@ -230,9 +312,9 @@ public class Menu {
 			System.out.println("[2] Joint Savings");
 			System.out.println("[3] Checking");
 			System.out.println("[4] Savings");
-			int number = scan.nextInt();
+			int number = Integer.parseInt(scan.nextLine());
 			System.out.println("Please enter a starting balance: (e.i. 0.00)");
-			double balance = scan.nextDouble();
+			double balance = Double.parseDouble(scan.nextLine());
 			
 			switch (number) {
 		
@@ -261,11 +343,16 @@ public class Menu {
 					
 				default:
 					System.out.println(" Sorry, please enter 1, 2, 3, or 4");
-					accountMenu();				
+					accountMenu();
+			
 			}
 			
 			System.out.println("Your requests for an account has been entered. Please login again to see if your account has been accepted or denied.");
 			loginMenu();
+			break;
+		default:
+			System.out.println("PLease enter a number 1-4");
+			accountMenu();
 				
 		}
 		
@@ -305,6 +392,9 @@ public class Menu {
 			System.out.println("Let's try again...");
 			jointAcctMenu();
 			break;
+		default:
+			System.out.println("PLease enter a  y or n. Sorry now you have to start over");
+			jointAcctMenu();
 			
 		}
 	
@@ -325,6 +415,10 @@ public class Menu {
 		case "n":
 			accountMenu();
 			break;
+			
+		default:
+			System.out.println("PLease enter a y or n");
+			anyMoreMenu();
 		
 		}
 		
@@ -337,7 +431,7 @@ public class Menu {
 			System.out.println("[1] Desposit");
 			System.out.println("[2] Withdraw");
 			System.out.println("[3] Go back to see Accounts");
-			int which = scan.nextInt();
+			int which = Integer.parseInt(scan.nextLine());
 			
 			switch(which) {
 			
@@ -345,7 +439,7 @@ public class Menu {
 					System.out.println("Please enter the account number: ");
 					String acctNum = scan.nextLine();
 					System.out.println("Please enter the amount:");
-					double amt = scan.nextDouble();
+					double amt = Double.parseDouble(scan.nextLine());
 					Transactions.depositMoney(amt, Integer.valueOf(acctNum));
 					anotherTrans();
 					break;
@@ -354,7 +448,7 @@ public class Menu {
 					System.out.println("Please enter the account number: ");
 					String acctNum2 = scan.nextLine();
 					System.out.println("Please enter the amount:");
-					double amt2 = scan.nextDouble();
+					double amt2 =Double.parseDouble(scan.nextLine());
 					Transactions.withdrawMoney(amt2, Integer.valueOf(acctNum2));
 					anotherTrans();
 					break;	
@@ -362,6 +456,10 @@ public class Menu {
 				case 3:
 					accountMenu();
 					break;
+					
+				default:
+					System.out.println("PLease enter a number 1-3");
+					transactionsMenu();
 			}
 			
 		} else if(current.getTransactions().getStatus().equals("denied")) {
@@ -370,8 +468,7 @@ public class Menu {
 			System.out.println("...taking you back to main menu...");
 			startMenu();
 			
-		}	
-			else {	
+		} else {	
 			System.out.print("Your account hasn't been approvedyet, please check back in later!");
 			System.out.println("...taking you back to main menu...");
 			startMenu();	
@@ -387,7 +484,11 @@ public class Menu {
 				transactionsMenu();
 				break;
 			case "n":
-				transactionsMenu();
+				accountMenu();
+				break;
+			default:
+				System.out.println("PLease enter a y or n");
+				anotherTrans();
 		}
 	}
 	

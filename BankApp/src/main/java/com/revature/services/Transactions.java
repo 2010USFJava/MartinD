@@ -26,22 +26,6 @@ public class Transactions implements Serializable {
 	public static ArrayList<String> tItems;
 	
 	
-	
-	
-	
-	
-	 /*public enum accountType {
-		SAVINGS,
-		CHECKING,
-		JOINTSAVINGS,
-		JOINTCHECKING
-		
-		
-		
-	} */
-	
-	
-	
 	public Transactions(String accountType, double balance) {
 		Transactions.accountType = accountType;
 		Transactions.balance = balance;
@@ -87,14 +71,18 @@ public class Transactions implements Serializable {
 	
 	
 	public static void withdrawMoney(double amount, int accountNumber) {
-		if (balance <= 0.00) {
+		AccountInfo  a = AccountInfo.findAccountNum(accountNumber);
+		balance = a.getTransactions().getBalance();
+		if ( balance <= 0.00) {
 			System.out.println("Insufficient Balance");
 		} else {
 			balance -= amount;
+			a.getTransactions().setBalance(balance);
 			addTransactions(String.valueOf(amount) + "has been added to your account. New Balance: " + String.valueOf(balance));
 			FileStuff.writeAccountsFile(accounts);
+			a.getTransactions();
+			LogThis.LogIt("info", "Balance was withdrawn $" + amount + "from " + Transactions.getAccountNumber());
 		}	
-		
 		
 	}
 	
@@ -161,9 +149,14 @@ public class Transactions implements Serializable {
 
 
 	public static void depositMoney(double amount, int accountNumber) {
+		AccountInfo  a = AccountInfo.findAccountNum(accountNumber);
+		balance = a.getTransactions().getBalance();
 		balance += amount;
-		addTransactions(String.valueOf(amount) + "has been removed from your account. New Balance: " + String.valueOf(balance));
-		
+		a.getTransactions().setBalance(balance);
+		addTransactions(String.valueOf(amount) + "has been added to your account. New Balance: " + String.valueOf(balance));
+		FileStuff.writeAccountsFile(accounts);
+		a.getTransactions();
+		LogThis.LogIt("info", "A deposit has been made " + amount + "added to account " + Transactions.getAccountNumber());
 	}
 
 

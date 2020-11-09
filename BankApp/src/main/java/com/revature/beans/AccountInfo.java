@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import com.revature.menus.Menu;
+import com.revature.services.FileStuff;
+import com.revature.services.LogThis;
 import com.revature.services.Transactions;
 
 public class AccountInfo implements Serializable {
@@ -17,12 +19,12 @@ public class AccountInfo implements Serializable {
 	private String phoneNumber;
 	private String emailAddress;
 	private String dateOfBirth;
-	private String accountType;
-	private int accountNumber;
+	//private String accountType;
+	//private int accountNumber;
 	private String username;
 	private String password;
-	//private int balance;
-	private Transactions transactions;
+
+	private static Transactions transactions;
 	
 	public static List<AccountInfo> accountLogins = new ArrayList<AccountInfo>();
 	public static List<AccountInfo> customerAccounts = new ArrayList<AccountInfo>();
@@ -31,8 +33,7 @@ public class AccountInfo implements Serializable {
 	
 	
 	
-	//constructor for customer username and password (not open to users)
-	//could ason just use a hashmap to store usernames and passwords !!!!
+
 	public AccountInfo(String username, String password) {
 		this.username = username;
 		this.password = password;
@@ -43,6 +44,8 @@ public class AccountInfo implements Serializable {
 	public AccountInfo(String name, String address, String phoneNumber, String emailAddress, String dateOfBirth) {
 		this(name, address, phoneNumber, emailAddress, dateOfBirth, "Joint Account Holder");
 		customerAccounts.add(this);
+		FileStuff.writeCustomerAccountsFile(customerAccounts);
+		LogThis.LogIt("info", "A new bank account created for " + this.getName() + "AccountNum: " + Transactions.getAccountNumber());
 	}
 	
 	
@@ -56,32 +59,20 @@ public class AccountInfo implements Serializable {
 		this.dateOfBirth = dateOfBirth;
 		this.username = username;
 		customerAccounts.add(this);
+		FileStuff.writeCustomerAccountsFile(customerAccounts);
+		AccountInfo.getTransactions();
+		LogThis.LogIt("info", "A new bank account created for " + this.getName() + "AccountNum: " + Transactions.getAccountNumber());
 	}
 	
-	/*public AccountInfo(String name, String address, String phoneNumber, String emailAddress, String dateOfBirth, String username, Transactions transactions) {
-		this.name = name;
-		this.address = address;
-		this.phoneNumber = phoneNumber;
-		this.emailAddress = emailAddress;
-		this.dateOfBirth = dateOfBirth;
-		this.username = username;
-		this.transactions = transactions;
-	}*/
 
 
-	
-	
-
-	
-
-
-	public Transactions getTransactions() {
+	public static Transactions getTransactions() {
 		return transactions;
 	}
 
 
 	public void setTransactions(Transactions transactions) {
-		this.transactions = transactions;
+		AccountInfo.transactions = transactions;
 	}
 
 
@@ -137,27 +128,6 @@ public class AccountInfo implements Serializable {
 		this.dateOfBirth = dateOfBirth;
 	}
 
-
-	public String getAccountType() {
-		return accountType;
-	}
-
-
-	public void setAccountType(String accountType) {
-		this.accountType = accountType;
-	}
-
-
-	public int getAccountNumber() {
-		return accountNumber;
-	}
-
-
-	public void setAccountNumber(int accountNumber) {
-		this.accountNumber = accountNumber;
-	}
-	
-
 	public String getUsername() {
 		return username;
 	}
@@ -183,7 +153,7 @@ public class AccountInfo implements Serializable {
 	
 	
 	
-	public static void checkingLogin(String uname, String pword) {
+	public static AccountInfo checkingLogin(String uname, String pword) {
 		for (int i = 0; i < accountLogins.size(); i++) {
 			String userName= accountLogins.get(i).getUsername();
 			String userPassword= accountLogins.get(i).getPassword();
@@ -191,13 +161,14 @@ public class AccountInfo implements Serializable {
 			if(userName.equals(uname) && userPassword.equals(pword)) {
 				System.out.println("Login Successful!");
 				Menu.accountMenu();
+				return accountLogins.get(i);
 			} else {
 				System.out.println("Sorry couldn't find that login information.");
 				System.out.println("Please make sure you have the correct username and password.");
 				Menu.startMenu();
 			}
 		}
-		
+		return null;
 	}
 	
 	
