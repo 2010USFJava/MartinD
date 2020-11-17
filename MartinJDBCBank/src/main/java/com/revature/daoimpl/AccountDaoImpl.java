@@ -20,13 +20,14 @@ public class AccountDaoImpl implements AccountDao {
 
 
 	@Override
-	public void createAccount(double initial, String type) throws SQLException {
+	public void createAccount(double initial, String type, User u) throws SQLException {
 		Connection conn = cf.getConnection();
-		String sql = "insert into accounts values(default,?,?,default)";
+		String sql = "insert into accounts values(default,?,?, ?)";
 		PreparedStatement ps = conn.prepareStatement(sql,
 				Statement.RETURN_GENERATED_KEYS);
 		ps.setDouble(1, initial);
 		ps.setString(2, type);
+		ps.setInt(3, u.getUserId());
 		ps.executeUpdate();
 		LogThis.LogIt("info", "New Account created and added to database initial deposit: $" + initial);
 	}

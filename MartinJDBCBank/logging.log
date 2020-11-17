@@ -7,3 +7,10 @@
 [INFO ] 2020-11-17 17:52:38.398 [main] LogThis - New User created: testing1
 [INFO ] 2020-11-17 17:56:32.839 [main] LogThis - New User created: testing3
 [INFO ] 2020-11-17 17:56:49.527 [main] LogThis - New Account created and added to database initial deposit: $100.0
+[INFO ] 2020-11-17 18:02:39.344 [main] LogThis - New User created: testing4
+[INFO ] 2020-11-17 18:03:28.150 [main] LogThis - New Account created and added to database initial deposit: $180.0
+[INFO ] 2020-11-17 18:05:46.360 [main] LogThis - New User created: new
+[INFO ] 2020-11-17 18:41:16.722 [main] LogThis - New User created: trying
+[INFO ] 2020-11-17 18:41:41.332 [main] LogThis - New Account created and added to database initial deposit: $280.0
+[INFO ] 2020-11-17 18:44:14.513 [main] LogThis - Bank Account  3 changed account balance to: 280.0
+[INFO ] 2020-11-17 18:46:51.605 [main] LogThis - New User created: jesus

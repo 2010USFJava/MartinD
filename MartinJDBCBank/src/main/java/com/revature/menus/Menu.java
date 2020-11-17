@@ -108,7 +108,7 @@ public class Menu {
 					int deposit = Integer.parseInt(scan.nextLine());
 					AccountDao acct = new AccountDaoImpl();
 					try {
-						acct.createAccount(deposit, type);
+						acct.createAccount(deposit, type, user);
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
@@ -120,7 +120,7 @@ public class Menu {
 					int depo= Integer.parseInt(scan.nextLine());
 					AccountDao acc = new AccountDaoImpl();
 				try {
-					acc.createAccount(depo, typ);
+					acc.createAccount(depo, typ, user);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -148,7 +148,7 @@ public class Menu {
 				break;
 			case 2:
 				AccountDao deposit = new AccountDaoImpl();
-				System.out.println("Please enter account ID you wish to access");
+				System.out.println("Please enter bank_account_ID you wish to access");
 				int id2 = Integer.parseInt(scan.nextLine());
 				System.out.println("How much do you want to deposit?");
 				double depositAmt = Double.parseDouble(scan.nextLine());
