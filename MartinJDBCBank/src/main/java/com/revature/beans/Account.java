@@ -5,16 +5,30 @@ public class Account {
 	
 	private int acctId;
 	private double balance;
-	private String transacType;
-	private double amount;
+	private String accType;
+	private int userId;
 	
-	public Account(int acctId, double balance, String transacType, double amount) {
+	public Account(int acctId, double balance, String accType, int userId) {
 		super();
 		this.acctId = acctId;
 		this.balance = balance;
-		this.transacType = transacType;
-		this.amount = amount;
+		this.accType = accType;
+		this.userId = userId;
 	}
+	
+	
+
+	public int getUserId() {
+		return userId;
+	}
+
+
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+
 
 	public int getAcctId() {
 		return acctId;
@@ -32,25 +46,17 @@ public class Account {
 		this.balance = balance;
 	}
 
-	public String getTransacType() {
-		return transacType;
+	public String getAccType() {
+		return accType;
 	}
 
-	public void setTransacType(String transacType) {
-		this.transacType = transacType;
-	}
-
-	public double getAmount() {
-		return amount;
-	}
-
-	public void setAmount(double amount) {
-		this.amount = amount;
+	public void setAccType(String accType) {
+		this.accType = accType;
 	}
 
 	@Override
 	public String toString() {
-		return "Account [acctId=" + acctId + ", balance=" + balance + ", transacType=" + transacType + ", amount="
-				+ amount + "]";
+		return "Account [acctId=" + acctId + ", balance=" + balance + ", accType=" + accType + ", userId=" + userId
+				+ "]";
 	}
 }

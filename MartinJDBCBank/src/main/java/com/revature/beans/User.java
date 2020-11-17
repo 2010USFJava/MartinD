@@ -5,18 +5,14 @@ public class User {
 	private int userId;
 	private String username;
 	private String pword;
-	//private boolean isAdmin;
-	private int acctId;
 	
 	
 	
-	public User(int userId, String username, String pword, int acctId) {
+	public User(int userId, String username, String pword) {
 		super();
 		this.userId = userId;
 		this.username = username;
 		this.pword = pword;
-		//this.isAdmin = isAdmin;
-		this.acctId = acctId;
 	}
 
 
@@ -57,33 +53,9 @@ public class User {
 
 
 
-	/* public boolean isAdmin() {
-		return isAdmin;
-	} 
-
-
-
-	public void setAdmin(boolean isAdmin) {
-		this.isAdmin = isAdmin;
-	} */
-
-
-
-	public int getAcctId() {
-		return acctId;
-	}
-
-
-
-	public void setAcctId(int acctId) {
-		this.acctId = acctId;
-	}
-
-
-
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", username=" + username + ", pword=" + pword
-				+ ", acctId=" + acctId + "]";
+				+ "]";
 	}
 }
